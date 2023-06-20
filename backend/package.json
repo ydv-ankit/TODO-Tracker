@@ -1,0 +1,22 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "backend service for todo-tracker",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/ydv-ankit/TODO-Tracker.git"
+  },
+  "author": "Ankit Ydv",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ydv-ankit/TODO-Tracker/issues"
+  },
+  "homepage": "https://github.com/ydv-ankit/TODO-Tracker#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
