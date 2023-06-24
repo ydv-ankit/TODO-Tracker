@@ -1,25 +1,25 @@
 const mongoose = require('mongoose')
-const {isEmail} = require('validator')
+const { isEmail } = require('validator')
 const bcrypt = require('bcrypt')
 
 // schemas
 const userSchema = new mongoose.Schema({
-    name:{
+    name: {
         type: String,
         required: true
     },
-    email:{
-        type : String,
+    email: {
+        type: String,
         required: true,
         unique: [true, 'email already used'],
         validate: [isEmail, "email is not valid"]
     },
-    password:{
+    password: {
         type: String,
         required: true,
         minLength: [8, "password must be 6 characters minimum"]
     },
-    dateStamp:{
+    dateStamp: {
         type: Date,
         default: Date.now
     }
@@ -32,11 +32,11 @@ const dataSchema = new mongoose.Schema({
         unique: true,
         required: true
     },
-    todoData:{
+    todoData: {
         type: String,
         required: true,
     },
-    date:{
+    date: {
         type: Date,
         default: Date.now
     }
@@ -48,8 +48,22 @@ userSchema.pre('save', async function (next) {
     next()
 })
 
+// static methods
+userSchema.statics.login = async function (email, password) {
+    const user = await this.findOne({ email })
+    if(user){
+        const auth = await bcrypt.compare(password, user.password)
+        if(auth){
+            return user
+        }
+        throw new Error("invalid password")
+    }
+    throw Error("invalid email")
+}
+
 // models
 const User = mongoose.model('user', userSchema)
 const UserData = mongoose.model('data', dataSchema)
 
-module.exports = {User, UserData}
+
+module.exports = { User, UserData }

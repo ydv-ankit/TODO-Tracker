@@ -13,12 +13,18 @@ function getToken(userID) {
 
 const handleErrors = (err) => {
     const errors = { email: '', password: '' }
-    // console.log(err)
 
     // error code
     if (err.code == 11000) {
         errors["email"] = "email already used"
-        return errors
+    }
+
+    // invalid email OR password
+    if(err.message == "invalid email"){
+        errors.email = "invalid email"
+    }
+    if(err.message == "invalid password"){
+        errors.password = "invalid password"
     }
 
     // validation of email & password
@@ -26,8 +32,8 @@ const handleErrors = (err) => {
         Object.values(err.errors).forEach(({ properties }) => {
             errors[properties.path] = properties.message
         })
-        return errors
     }
+    return errors
 }
 
 module.exports.signup_post = async (req, res) => {
@@ -43,6 +49,15 @@ module.exports.signup_post = async (req, res) => {
     }
 }
 
-module.exports.login_post = (req, res) => {
-    res.send("login post")
+module.exports.login_post = async (req, res) => {
+    const { email, password } = req.body
+    try{
+        const user = await User.login(email, password)
+        res.cookie('jwt', getToken(user._id), {httpOnly: true, maxAge: maxAge * 1000})
+        res.status(202).json({"success": user})
+    }
+    catch(err){
+        const error = handleErrors(err)
+        res.status(401).json({"error" : error})
+    }
 }
