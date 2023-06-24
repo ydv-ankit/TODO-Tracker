@@ -1,18 +1,33 @@
 const express = require('express')
-const app = express()
+require('dotenv').config();
+const mongoose = require('mongoose')
+const cookieParser = require('cookie-parser')
 const authRoutes = require('./routes/authRoutes')
+
+
+const app = express()
 
 // middlewares
 app.use(express.json())
+app.use(cookieParser())
 
 // variables
 const HOST = 'localhost'
-const PORT = process.env.PORT || 8888
+const PORT = process.env.PORT || 8080
+const dbURI = "mongodb://127.0.0.1:27017/"
+const db = "todo-tracker"
 
-app.listen(PORT, () => console.log(`server running at http://${HOST}:${PORT}`))
+// connect with mongoDB
+console.log("trying to connect with database...")
+mongoose.connect(dbURI + db, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then((result) => {
+        console.log("database connected")
+        app.listen(PORT, () => console.log("server running at port:" + PORT))
+    })
+    .catch((err) => console.log(err))
 
 // routes
-app.get('/', (req, res)=>{
+app.get('/', (req, res) => {
     res.send("server running")
 })
 
