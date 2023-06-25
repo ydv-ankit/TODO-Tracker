@@ -12,7 +12,7 @@ function getToken(userID) {
 }
 
 const handleErrors = (err) => {
-    const errors = { email: '', password: '' }
+    const errors = {name:'', email: '', password: '' }
 
     // error code
     if (err.code == 11000) {
