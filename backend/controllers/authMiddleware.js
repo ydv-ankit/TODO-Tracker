@@ -3,13 +3,15 @@ const jwt = require('jsonwebtoken')
 const mySecretKey = process.env.secret_key
 
 const requireLogin = (req, res, next) => {
-    console.log(req.cookies)
     const jwtCookie = req.cookies.jwt
     if (jwtCookie) {
         const auth = jwt.verify(jwtCookie, mySecretKey)
-        console.log("auth: ", auth)
+        console.log(auth)
+        res.send({"success" : auth})
+    } else {
+        console.log("not authorized")
+        res.send({ 'error': 'login required' })
     }
-    next()
 }
 
 module.exports = requireLogin
