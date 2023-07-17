@@ -3,7 +3,8 @@ require('dotenv').config();
 const mongoose = require('mongoose')
 const cookieParser = require('cookie-parser')
 const authRoutes = require('./routes/authRoutes');
-const cors = require('cors')
+const cors = require('cors');
+const requireLogin = require('./controllers/authMiddleware');
 
 const app = express()
 
@@ -13,10 +14,9 @@ app.use(cookieParser())
 app.use(cors())
 
 // variables
-const HOST = 'localhost'
-const PORT = process.env.PORT || 8080
-const dbURI = "mongodb://127.0.0.1:27017/"
-const db = "todo-tracker"
+const PORT = process.env.PORT || 8888
+const dbURI = process.env.DBURL
+const db = process.env.DBNAME
 
 // connect with mongoDB
 console.log("trying to connect with database...")

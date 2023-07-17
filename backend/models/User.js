@@ -32,9 +32,18 @@ const dataSchema = new mongoose.Schema({
         unique: true,
         required: true
     },
-    todoData: {
+    data: {
         type: String,
         required: true,
+    },
+    isOpen: {
+        type: Boolean
+    },
+    isWorking: {
+        type: Boolean
+    },
+    isCompleted: {
+        type: Boolean
     },
     date: {
         type: Date,
@@ -64,6 +73,5 @@ userSchema.statics.login = async function (email, password) {
 // models
 const User = mongoose.model('user', userSchema)
 const UserData = mongoose.model('data', dataSchema)
-
 
 module.exports = { User, UserData }
